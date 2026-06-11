@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background rounded square -->
+  <rect width="32" height="32" rx="8" fill="#4CAF50"/>
+  <!-- Leaf shape -->
+  <path d="M16 5 C16 5 7 10 7 18 C7 23 11 27 16 27 C21 27 25 23 25 18 C25 10 16 5 16 5 Z" fill="#ffffff" opacity="0.95"/>
+  <!-- Stem -->
+  <line x1="16" y1="27" x2="16" y2="22" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Leaf vein -->
+  <path d="M16 10 C16 10 16 20 16 25" stroke="#4CAF50" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  <path d="M16 14 C14 16 11 17 10 19" stroke="#4CAF50" stroke-width="0.8" stroke-linecap="round" opacity="0.35"/>
+  <path d="M16 14 C18 16 21 17 22 19" stroke="#4CAF50" stroke-width="0.8" stroke-linecap="round" opacity="0.35"/>
+</svg>
