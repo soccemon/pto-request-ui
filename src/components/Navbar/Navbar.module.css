@@ -72,3 +72,23 @@
   color: var(--rejected-text);
   border-color: var(--rejected-text);
 }
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .logo {
+    font-size: 17px;
+  }
+  .userRole {
+    display: none;
+  }
+  .userName {
+    font-size: 13px;
+  }
+  .logoutBtn {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+}

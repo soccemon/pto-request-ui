@@ -136,22 +136,19 @@ export default function RequestsTable({
 
                   return (
                     <tr key={r.id}>
-                      {isManagerView && <td>{emp?.name || r.user_id}</td>}
-                      <td style={{ textTransform: 'capitalize' }}>{r.type}</td>
-                      <td>{fmt(r.start_date)}</td>
-                      <td>{fmt(r.end_date)}</td>
-                      {/* num_days is calculated server-side (weekdays only) */}
-                      <td>{r.num_days ?? '—'}</td>
-                      {/* Long reasons are clipped with ellipsis; full text shown as tooltip */}
-                      <td className={styles.comment} title={r.reason}>{r.reason || '—'}</td>
-                      <td><StatusBadge status={r.status} /></td>
-                      <td className={styles.comment} title={r.manager_comment}>
+                      {isManagerView && <td data-label="Employee">{emp?.name || r.user_id}</td>}
+                      <td data-label="Type" style={{ textTransform: 'capitalize' }}>{r.type}</td>
+                      <td data-label="Start Date">{fmt(r.start_date)}</td>
+                      <td data-label="End Date">{fmt(r.end_date)}</td>
+                      <td data-label="Days">{r.num_days ?? '—'}</td>
+                      <td data-label="Reason" className={styles.comment} title={r.reason}>{r.reason || '—'}</td>
+                      <td data-label="Status"><StatusBadge status={r.status} /></td>
+                      <td data-label="Manager Comment" className={styles.comment} title={r.manager_comment}>
                         {r.manager_comment || '—'}
                       </td>
 
-                      {/* Approve / Reject buttons are only shown for Pending requests in manager view */}
                       {isManagerView && (
-                        <td>
+                        <td data-label="Actions">
                           {r.status?.toLowerCase() === 'pending' && (
                             <>
                               <button

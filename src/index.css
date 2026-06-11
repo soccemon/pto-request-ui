@@ -129,3 +129,9 @@ input:focus, select:focus, textarea:focus {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px 12px;
+  }
+}

@@ -85,6 +85,15 @@ src/
 
 Dark mode is toggled via the Navbar button. The preference persists in `localStorage.darkMode`. The `data-theme` attribute on `<html>` switches between light and dark CSS custom property sets defined in `index.css`.
 
+## Responsive design
+
+The UI is mobile-friendly down to ~375px viewport width. Key breakpoints:
+
+- **≤640px** — `RequestsTable` switches from a scrollable table to a stacked card layout. Each row becomes a bordered card; CSS `::before` pseudo-elements (populated via `data-label` attributes on `<td>`) render column labels on the left. The empty-state cell suppresses its label.
+- **≤500px** — Manager dashboard summary cards reduce their `min-width` so all three (Pending / Approved / Rejected) fit in one row.
+- **≤480px** — Navbar compresses (role label hidden, tighter padding). BalanceCard vertical dividers hidden when stats wrap. `NewRequestModal` and `ApproveRejectModal` slide up as bottom sheets (full-width, rounded top corners, `max-height: 92vh`); date fields stack to a single column; footer buttons stack full-width.
+- **≤600px** — `.page` wrapper padding reduces from `28px 24px` to `16px 12px`.
+
 ## Form validation (NewRequestModal)
 
 Before advancing from step 1 (Details) to step 2 (Review):

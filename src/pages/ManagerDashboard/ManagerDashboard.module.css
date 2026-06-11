@@ -49,3 +49,13 @@
 .pending .summaryVal { color: var(--pending-text); }
 .approved .summaryVal { color: var(--approved-text); }
 .rejected .summaryVal { color: var(--rejected-text); }
+
+@media (max-width: 500px) {
+  .summaryCard {
+    min-width: 80px;
+    padding: 14px 12px;
+  }
+  .summaryVal {
+    font-size: 24px;
+  }
+}

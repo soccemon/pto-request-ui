@@ -118,3 +118,30 @@
   align-items: center;
 }
 .btnReject:hover { background: #c62828; }
+
+@media (max-width: 480px) {
+  .overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    border-radius: var(--radius) var(--radius) 0 0;
+    max-height: 92vh;
+    overflow-y: auto;
+    animation: slideUp 0.22s ease;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btnSecondary,
+  .btnApprove,
+  .btnReject {
+    width: 100%;
+    justify-content: center;
+    padding: 11px;
+  }
+}

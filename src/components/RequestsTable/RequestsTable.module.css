@@ -107,3 +107,74 @@ tbody td {
   border: 1px solid var(--rejected-text);
 }
 .rejectBtn:hover { background: #FFCDD2; }
+
+@media (max-width: 640px) {
+  .tableWrap table,
+  .tableWrap thead,
+  .tableWrap tbody,
+  .tableWrap tr {
+    display: block;
+  }
+
+  .tableWrap thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .tableWrap tbody tr {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin: 10px 12px;
+    overflow: hidden;
+  }
+
+  .tableWrap tbody tr:hover {
+    background: transparent;
+  }
+
+  .tableWrap td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--surface2);
+    font-size: 13px;
+  }
+
+  .tableWrap td:last-child {
+    border-bottom: none;
+  }
+
+  .tableWrap td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-right: 16px;
+    white-space: nowrap;
+  }
+
+  .comment {
+    max-width: none;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .tableWrap .empty {
+    justify-content: center;
+    padding: 32px 12px;
+  }
+
+  .tableWrap .empty::before {
+    display: none;
+  }
+
+  .actionBtn {
+    padding: 6px 12px;
+    margin-right: 4px;
+  }
+}
