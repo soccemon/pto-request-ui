@@ -4,6 +4,7 @@ import Login from './pages/Login/Login'
 import EmployeeDashboard from './pages/EmployeeDashboard/EmployeeDashboard'
 import ManagerDashboard from './pages/ManagerDashboard/ManagerDashboard'
 import Navbar from './components/Navbar/Navbar'
+import { API_URL } from './config'
 
 const PING_INTERVAL_MS = 4000
 const PING_TIMEOUT_MS = 8000
@@ -12,7 +13,7 @@ async function pingBackend() {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), PING_TIMEOUT_MS)
   try {
-    const res = await fetch('/users', { signal: controller.signal })
+    const res = await fetch(`${API_URL}/users`, { signal: controller.signal })
     return res.ok
   } catch {
     return false
