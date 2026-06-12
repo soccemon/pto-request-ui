@@ -9,4 +9,4 @@
  * CORS is never an issue. In production you would point this at your deployed
  * backend URL (or keep it empty if the frontend and API are co-hosted).
  */
-export const API_URL = ''
+export const API_URL = import.meta.env.VITE_API_URL ?? ''
