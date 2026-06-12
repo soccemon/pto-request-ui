@@ -1,17 +1,3 @@
-/**
- * App.jsx — Root component
- *
- * Responsibilities:
- *   1. Own the authenticated user in React state so any change (login / logout)
- *      instantly re-renders dependent UI (Navbar visibility, route guards).
- *   2. Own the dark-mode toggle and sync it to localStorage + the <html> element.
- *   3. Define the application's route tree and enforce role-based access.
- *
- * Why user lives here (not in a Context or Zustand store):
- *   The user object is only consumed by a small, shallow tree (Navbar, two
- *   dashboard pages). Lifting it to App is sufficient; a global store would
- *   be over-engineering for this size of app.
- */
 import { useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login/Login'
@@ -19,60 +5,75 @@ import EmployeeDashboard from './pages/EmployeeDashboard/EmployeeDashboard'
 import ManagerDashboard from './pages/ManagerDashboard/ManagerDashboard'
 import Navbar from './components/Navbar/Navbar'
 
-/**
- * ProtectedRoute
- *
- * Wrapper that guards any route requiring authentication.
- * If `user` is null (not logged in), it redirects to the login page.
- * Otherwise it renders its children unchanged.
- *
- * @param {object|null} user     - The currently logged-in user, or null
- * @param {ReactNode}   children - The page component to render if authenticated
- */
+const PING_INTERVAL_MS = 4000
+const PING_TIMEOUT_MS = 8000
+
+async function pingBackend() {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), PING_TIMEOUT_MS)
+  try {
+    const res = await fetch('/users', { signal: controller.signal })
+    return res.ok
+  } catch {
+    return false
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+function ServerLoadingScreen() {
+  return (
+    <div className="server-loading">
+      <div className="server-loading__logo">🌿 PTO Request System</div>
+      <div className="server-loading__spinner" />
+      <p className="server-loading__message">
+        Waking up the server, this may take up to a minute on first load…
+      </p>
+    </div>
+  )
+}
+
 function ProtectedRoute({ user, children }) {
   if (!user) return <Navigate to="/" replace />
   return children
 }
 
 export default function App() {
-  /**
-   * Initialise user from localStorage so a page refresh doesn't log the user out.
-   * Using a lazy initialiser (() => ...) means localStorage is only read once on
-   * mount rather than on every render.
-   */
+  const [serverReady, setServerReady] = useState(false)
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || 'null'))
-
-  /** Persist dark-mode preference across sessions. */
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true')
 
-  /**
-   * Keep the <html data-theme> attribute in sync with darkMode state.
-   * CSS custom properties in index.css switch their values based on this
-   * attribute, giving us a zero-JS theming system.
-   */
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light')
     localStorage.setItem('darkMode', darkMode)
   }, [darkMode])
 
-  /**
-   * Called by the Login page after a successful POST /auth/login.
-   * Persists the user to localStorage (survives refresh) and sets React state
-   * (triggers re-render so the Navbar appears and the route guard lifts).
-   *
-   * @param {object} u - Full user object returned by the backend
-   */
+  // Poll the backend until it responds, then show the app.
+  useEffect(() => {
+    let cancelled = false
+
+    async function poll() {
+      while (!cancelled) {
+        const ok = await pingBackend()
+        if (ok) {
+          if (!cancelled) setServerReady(true)
+          return
+        }
+        await new Promise(r => setTimeout(r, PING_INTERVAL_MS))
+      }
+    }
+
+    poll()
+    return () => { cancelled = true }
+  }, [])
+
+  if (!serverReady) return <ServerLoadingScreen />
+
   function handleLogin(u) {
     localStorage.setItem('user', JSON.stringify(u))
     setUser(u)
   }
 
-  /**
-   * Called by the Navbar logout button.
-   * Clears both localStorage and React state, which causes:
-   *   - The Navbar to unmount (conditional on `user` being truthy)
-   *   - ProtectedRoute to redirect to /
-   */
   function handleLogout() {
     localStorage.removeItem('user')
     setUser(null)
@@ -80,7 +81,6 @@ export default function App() {
 
   return (
     <>
-      {/* Only render the Navbar when someone is logged in */}
       {user && (
         <Navbar
           user={user}
@@ -91,18 +91,10 @@ export default function App() {
       )}
 
       <Routes>
-        {/* / — Login page. Redirect to dashboard if already authenticated. */}
         <Route
           path="/"
           element={user ? <Navigate to="/dashboard" replace /> : <Login onLogin={handleLogin} />}
         />
-
-        {/*
-          /dashboard — Role-based split:
-            - Managers see the full team request table with approve/reject actions.
-            - Employees see their own balance and requests with a new-request button.
-          ProtectedRoute redirects unauthenticated visitors back to /.
-        */}
         <Route
           path="/dashboard"
           element={
@@ -114,8 +106,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Catch-all: any unknown URL goes back to the root. */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
