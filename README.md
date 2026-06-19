@@ -2,10 +2,14 @@
 
 React + Vite frontend for a PTO (Paid Time Off) request management system. Employees can view their balance and submit leave requests; managers can approve or reject them.
 
+## Related
+
+- **Backend API:** [soccemon/pto-request-api](https://github.com/soccemon/pto-request-api) — FastAPI backend that this frontend connects to
+
 ## Prerequisites
 
 - Node.js 18+
-- The backend API running at `http://localhost:8000` (see `pto-request-api` in the parent directory)
+- The backend API running at `http://localhost:8000` (see [pto-request-api](https://github.com/soccemon/pto-request-api))
 
 ## Quick start
 
